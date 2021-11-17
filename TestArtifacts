@@ -1,0 +1,45 @@
+def artifactname = "QuebecRp2-artifact.jar"
+def repoName = "QuebecRp2-repo"
+def pipelineName = "balu_testartifacts"
+def semanticVersion = "${env.BUILD_NUMBER}.0.0"
+def packageName = "QuebecRp2_${env.BUILD_NUMBER}"
+def version = "${env.BUILD_NUMBER}.0"
+def pkgName = "QuebecRp2-package"
+
+pipeline{
+
+	agent any
+	
+	tools{
+		maven'Maven'
+	}  
+	
+	stages {
+
+     stage('PublishArtifacts') { 
+	            steps {
+	               snDevOpsStep()
+		       snDevOpsChange()
+	               echo 'Publishing Artifacts....'
+                	sleep 3
+					snDevOpsArtifact(artifactsPayload:"""{"artifacts": [{"name": "${artifactname}-${env.BUILD_NUMBER}","version":"${version}","semanticVersion": "${semanticVersion}","repositoryName": "${repoName}"}],"stageName": "PublishArtifacts"}""")            
+
+	            }
+	            
+	        }
+
+		stage('PublishPackage') {
+         steps {
+            snDevOpsStep()
+	    snDevOpsChange()
+            echo 'Publishing Package....'
+          	// format-4
+         	snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}-${env.BUILD_NUMBER}", "version": "${version}", "repositoryName": "${repoName}"}], "branchName":"main"}""")
+			// test without version should throw error - version is mandatory
+         	// snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}-noversion", artifactsPayload: """{"artifacts":[{"name": "${artifactname}-${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"main"}""")
+			
+         }
+ 	}
+ }
+ 
+}

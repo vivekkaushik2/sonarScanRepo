@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+    stages {
+        stage('Stage 1') {
+            when {
+                equals expected: 2, actual: 1
+            }
+            steps {
+                
+                echo 'Executing stage 1'
+                // error("error in stage1")
+                //sh 'fail'
+                sleep 5
+            }
+        }
+        stage('Stage 2') {
+            when {
+                equals expected: 2, actual: 2
+            }
+            steps {
+                echo 'Executing stage 2'
+                error("error in stage 2")
+                
+                sleep 5
+            }
+        }
+         stage('Stage 3') {
+            when {
+                equals expected: 2, actual: 1
+            }
+            steps {
+                
+
+                echo 'Executing stage 3'
+                sleep 5
+                }
+         
+		}
+    }
+}

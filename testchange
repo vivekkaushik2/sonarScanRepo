@@ -1,0 +1,18 @@
+pipeline {
+   agent any
+   tools {
+        maven 'Maven'
+
+    }
+    
+    stages{
+	   stage('Deploy') {
+	   		
+	   		steps{
+	   			snDevOpsChange()
+	   			echo 'test'
+	   		}
+	
+	  }
+  }
+}

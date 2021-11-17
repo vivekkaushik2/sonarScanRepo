@@ -1,0 +1,74 @@
+pipeline {
+   agent any
+   tools {
+        maven 'Maven'
+
+    }
+   stages {
+        stage('Build') {
+            steps {
+               
+                sh 'mvn -B -DskipTests clean compile'
+            }
+        }
+        
+        stage('Test') { 
+ 
+           steps {
+               sh 'mvn test'
+           }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml' 
+                }
+            }
+        }
+       
+
+       stage('Deploy') {
+             steps{
+                  snDevOpsStep (ignoreErrors:true)
+                  snDevOpsChange()
+                  echo 'deployment started'      
+              }
+      }
+      
+      stage('Deliver2Dev') {
+      
+            when {
+                branch 'dev' 
+            }
+           steps {
+              
+              //snDevOpsChange()
+              echo "executing in dev branch"
+	       
+           }
+        }
+        
+        stage('Deliver2Feature1') {
+            when {
+                branch 'feature1' 
+            }
+           steps {
+              echo "executing in feature1 branch"
+              //snDevOpsChange()
+        
+           }
+        }
+        
+        stage('Deliver2Patch-1') {
+            when {
+                branch 'patch-1' 
+            }
+           steps {
+              echo "executing in patch1 branch"
+              //snDevOpsChange()
+ 	       
+           }
+        }
+        
+        
+      
+  }
+}

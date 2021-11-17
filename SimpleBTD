@@ -1,0 +1,46 @@
+pipeline {
+   agent any
+   tools {
+        maven 'Maven'
+
+    }
+   stages {
+   
+        stage('Build') {
+            steps {
+               
+                sh 'mvn -B -DskipTests clean compile'
+            }
+        }
+        
+        stage('Test') {
+        	when {
+                branch 'qa' 
+            }
+         
+
+           steps {
+               sh 'mvn test'
+      
+				}
+           post {
+                always {
+                    junit '**/target/surefire-reports/*.xml' 
+                }
+            }
+        }
+    
+       
+
+       stage('Deploy') {
+              when {
+                branch 'feature1' 
+            	}
+             steps{
+                  echo 'deployment started'      
+              }
+      }
+       
+      
+  }
+}

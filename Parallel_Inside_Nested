@@ -1,0 +1,66 @@
+def semanticVersion = "${env.BUILD_NUMBER}.0.0"
+def packageName = "devops_pipeline_demo_${env.BUILD_NUMBER}"
+def version = "${env.BUILD_NUMBER}.0"
+def artifactname = "sp-boot-app.jar"
+def repoName = "sp-boot-app-repo"
+
+pipeline {
+   agent any
+   tools {
+        maven 'Maven'
+    }
+    //environment {
+	 //SCANNER_HOME = tool 'sonarScanner'
+	//}
+	
+    stages {
+		  stage('Build') {
+
+			stages{
+				stage('Build.1') {
+						  parallel 
+						  {
+							    stage('pTest.1') {
+							    		// parallel stages inside nested
+					    					steps {
+										        echo'pTest.1 in progress'
+										        //sh'mvn test'
+										        snDevOpsChange()
+										       
+										      }
+							    } // end of ptest1.1
+							    stage('pTest.2') {
+										      steps {
+										       	echo'pTest.2 in progress'
+										        sh'mvn test'
+					          					//sonarSummaries()
+										        
+										      }
+							    }// end of ptest1.2
+						    
+						  }// end of parallel
+					}// end of Build.1				
+			
+			}	    
+		    
+		  }// end of build1
+		
+
+				
+			
+	} // end of stages
+} // end of pipeline
+
+def sonarSummaries() {
+
+   //withSonarQubeEnv('Sonar_Cloud') {
+       //sh '${SCANNER_HOME}/bin/sonar-scanner -Dproject.settings=${SCANNER_HOME}/conf/qa-sonar-scanner-cloud.properties'
+   
+	//}
+	
+    withSonarQubeEnv('sonarQube_local') {
+       	// sh '${SCANNER_HOME}/bin/sonar-scanner -Dproject.settings=${SCANNER_HOME}/conf/qa-sonar-scanner.properties'
+   		// sh '${SCANNER_HOME}/bin/sonar-scanner -Dproject.settings=${SCANNER_HOME}/conf/sonar-scanner.properties'
+	}
+	
+} // end of def sonarsummaries

@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+    stages {
+        stage('Stage 1') {
+            when {
+                equals expected: 2, actual: 1
+            }
+            steps {
+
+            	//snDevOpsChange()
+            	sleep 1
+
+                //error('failing the test')
+                echo 'Executing stage 1'
+                //sh 'fail'
+                
+            }
+        }
+        stage('Stage 2') {
+            when {
+                equals expected: 2, actual: 2
+            }
+            steps {
+                echo 'Upstream stage is skipped, creating CR with Executing stage 2'
+                // error('failing the test')
+               
+                snDevOpsChange()
+                sleep 1
+            }
+        }
+
+        stage('Stage 3') {
+            when {
+                equals expected: 2, actual: 1
+            }
+            steps {
+                
+                
+                // error('failing the test')
+                echo 'Executing stage 3'
+                sleep 1
+            }
+        }
+        stage('Stage 4') {
+            when {
+                equals expected: 2, actual: 2
+            }
+            steps {
+                
+                //sh 'fail'
+                // error('failing the test')
+                echo 'Executing stage 4'
+                snDevOpsChange()
+                sleep 1
+            }
+        }
+
+    }
+}
