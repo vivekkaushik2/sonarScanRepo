@@ -23,25 +23,7 @@ pipeline {
 
            }
        }
-    stages {
-       stage('Build-2') {
-           steps {
-              
-              sh 'mvn -B -DskipTests clean compile'
-	      snDevOpsChange()
-
-           }
-       }
-       
-     stages {
-       stage('Build-3') {
-           steps {
-              
-              sh 'mvn -B -DskipTests clean compile'
-	      snDevOpsChange()
-
-           }
-       }  
+   
        stage('Test') {
            steps {
               
