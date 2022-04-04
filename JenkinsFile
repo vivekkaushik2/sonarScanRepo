@@ -15,7 +15,7 @@ pipeline {
 	 SCANNER_HOME = tool 'sonarScanner'
 	}  
   stages {
-       stage('Build') {
+       stage('Build-1') {
            steps {
               
               sh 'mvn -B -DskipTests clean compile'
@@ -23,6 +23,25 @@ pipeline {
 
            }
        }
+    stages {
+       stage('Build-2') {
+           steps {
+              
+              sh 'mvn -B -DskipTests clean compile'
+	      snDevOpsChange()
+
+           }
+       }
+       
+     stages {
+       stage('Build-3') {
+           steps {
+              
+              sh 'mvn -B -DskipTests clean compile'
+	      snDevOpsChange()
+
+           }
+       }  
        stage('Test') {
            steps {
               
