@@ -19,6 +19,7 @@ pipeline {
            steps {
               
               sh 'mvn -B -DskipTests clean compile'
+	      snDevOpsChange()
 
            }
        }
@@ -26,6 +27,7 @@ pipeline {
            steps {
               
               sh 'mvn test'
+	      snDevOpsChange()
            }
            post {
              always {
